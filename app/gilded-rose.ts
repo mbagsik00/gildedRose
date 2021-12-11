@@ -31,7 +31,7 @@ export class GildedRose {
     this.items = items;
   }
 
-  degradeNonSpecialItemQuality(item: Item) {
+  private degradeNonSpecialItemQuality(item: Item) {
     if (item.sellIn < 0) {
       item.quality -= 2;
     } else {
@@ -43,33 +43,24 @@ export class GildedRose {
     return item;
   }
 
-  // sellIn < 0 // quality degrade twice
-  // quality cannot be 0
-  // quality cannot be greater than 50
   updateQuality() {
     this.items.forEach((item) => {
-      // item "Sulfuras" never has to be sold or decrease in quality = 80
       if (isItemSulfuras(item)) {
         return item;
       }
 
-      // item "Aged Brie" increase quality the older it gets
       if (isItemAgedBrie(item)) {
         if (item.quality < 50) {
           item.quality += 1;
         }
       }
 
-      // item "Conjured" degrade quality twice
       if (isItemConjured(item)) {
         item.quality -= 2;
 
         item.quality = item.quality >= 0 ? item.quality : 0;
       }
     
-      // item "Backstage passes" increase quality the older it gets
-      // increase by 2 if sellIn is <= 10; increase by 3 if sellIn <= 5
-      // sellIn < 0 then quality = 0
       if (isItemBackstagePass(item)) {
         if (item.sellIn <= 10 && item.sellIn > 5) {
           item.quality += 2;
@@ -81,8 +72,7 @@ export class GildedRose {
           item.quality += 1;
         }
       }
-         
-      // for other non special item
+
       if (!isSpecialItem(item)) {
         item = this.degradeNonSpecialItemQuality(item);
       }
