@@ -1,3 +1,5 @@
+import { isItemAgedBrie, isItemBackstagePass, isItemConjured, isItemSulfuras, isSpecialItem } from "./helper";
+
 /**
  * Represents an Item.
  * @param {string} name - The name of the item
@@ -23,7 +25,7 @@ export class GildedRose {
     this.items = items;
   }
 
-  degradeItemQuality(item: Item) {
+  degradeNonSpecialItemQuality(item: Item) {
     if (item.sellIn < 0) {
       item.quality -= 2;
     } else {
@@ -41,19 +43,19 @@ export class GildedRose {
   updateQuality() {
     this.items.forEach((item) => {
       // item "Sulfuras" never has to be sold or decrease in quality = 80
-      if (item.name === 'Sulfuras, Hand of Ragnaros') {
+      if (isItemSulfuras(item)) {
         return item;
       }
 
       // item "Aged Brie" increase quality the older it gets (sellIn)
-      if (item.name === 'Aged Brie') {
+      if (isItemAgedBrie(item)) {
         if (item.quality < 50) {
           item.quality += 1;
         }
       }
 
       // item "Conjured" degrade quality twice
-      if (item.name === 'Conjured Mana Cake') {
+      if (isItemConjured(item)) {
         item.quality -= 2;
 
         item.quality = item.quality >= 0 ? item.quality : 0;
@@ -62,7 +64,7 @@ export class GildedRose {
       // item "Backstage passes" increase quality the older it gets
       // increase by 2 if sellIn is <= 10; increase by 3 if sellIn <= 5
       // sellIn < 0 then quality = 0
-      if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
+      if (isItemBackstagePass(item)) {
         if (item.sellIn <= 10 && item.sellIn > 5) {
           item.quality += 2;
         } else if (item.sellIn <= 5 && item.sellIn >= 0) {
@@ -73,8 +75,8 @@ export class GildedRose {
       }
          
       // for other non special item
-      if (!['Aged Brie', 'Backstage passes to a TAFKAL80ETC concert', 'Conjured Mana Cake'].includes(item.name)) {
-        item = this.degradeItemQuality(item);
+      if (!isSpecialItem(item)) {
+        item = this.degradeNonSpecialItemQuality(item);
       }
 
       // day passed
