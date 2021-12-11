@@ -77,6 +77,8 @@ export class GildedRose {
           item.quality += 3;
         } else if (item.sellIn < 0) {
           item.quality = 0;
+        } else {
+          item.quality += 1;
         }
       }
          
