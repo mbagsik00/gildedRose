@@ -1,4 +1,10 @@
-import { isItemAgedBrie, isItemBackstagePass, isItemConjured, isItemSulfuras, isSpecialItem } from "./helper";
+import {
+  isItemAgedBrie,
+  isItemBackstagePass,
+  isItemConjured,
+  isItemSulfuras,
+  isSpecialItem
+} from './helper';
 
 /**
  * Represents an Item.
@@ -47,7 +53,7 @@ export class GildedRose {
         return item;
       }
 
-      // item "Aged Brie" increase quality the older it gets (sellIn)
+      // item "Aged Brie" increase quality the older it gets
       if (isItemAgedBrie(item)) {
         if (item.quality < 50) {
           item.quality += 1;
